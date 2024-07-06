@@ -1,58 +1,82 @@
 import sys
 import os
 
+
+def operations(filename, op):
+    if op == "-c":
+        numberOfBytes(filename)
+    elif op == "-l":
+        numberOfLines(filename)
+    elif op == "-w":
+        numberOfWords(filename)
+    elif op == "-m":
+        numberOfCharacters(filename)
+    print(filename)
+
+
 # Print out the number of bytes in a file
 def numberOfBytes(filename):
-  if sys.argv[1] == "-c":
-    print(os.path.getsize(filename), end = " ")
-    print(filename)
-  
+    print(os.path.getsize(filename), end=" ")
+
+
 # Print out the number of lines in a file
 def numberOfLines(filename):
-  if sys.argv[1] == "-l":
-    with open(filename, "r", encoding = "utf8") as f:
-      # f.readlines() reads the file in a single go and returns the lines of the files as list string elements
-      print(len(f.readlines()), end = " ") 
-    print(filename)
-  
+    with open(filename, "r", encoding="utf8") as f:
+        # f.readlines() reads the file in a single go and returns the lines of the files as
+        # list string elements
+        print(len(f.readlines()), end=" ")
+
+
 # Print out the number of words in a file
 def numberOfWords(filename):
-  if sys.argv[1] == "-w":
-    with open(filename, "r", encoding = "utf8") as f:
-      fileContent = f.read()
-      wordList = fileContent.split()
-      wordCount = len(wordList)
-      print(wordCount, end = " ")
-    print(filename)
-  
+    with open(filename, "r", encoding="utf8") as f:
+        fileContent = f.read()
+        wordList = fileContent.split()
+        wordCount = len(wordList)
+        print(wordCount, end=" ")
+
+
 # Print out the number of characters in a file
 def numberOfCharacters(filename):
-  if sys.argv[1] == "-m":
-    with open(filename, "r", encoding = "utf8") as f:
-      fileContentWordList = f.read().strip().split()
-      charLen = sum(len(word) for word in fileContentWordList)
-      print(charLen, end = " ")
-    print(filename)
-    
+    with open(filename, "r", encoding="utf8") as f:
+        fileContentWordList = f.read().split()
+        charLen = sum(len(word) for word in fileContentWordList)
+        print(charLen, end=" ")
 
-# Read from standard input if filename is not provided
+        """
+        Count characters including whitespaces
+        res = re.split(r'(\s)', fileRead)                        
+        res = [x for x in res if x != '']
+        print(len(res), end=" ")                       
+        """
+
 
 def main():
-  if sys.argv[1] not in ["-c", "-l", "-w", "-m"]:
-    numberOfBytes(filename)
-    numberOfLines(filename)
-    numberOfWords(filename)
-    numberOfCharacters(filename)
-  else:
-      filename = sys.argv[2]
-      if sys.argv[1] == "-c":
-        numberOfBytes(filename)
-      elif sys.argv[1] == "-l":
-        numberOfLines(filename)
-      elif sys.argv[1] == "-w":
-        numberOfWords(filename)
-      elif sys.argv[1] == "-m":
-        numberOfCharacters(filename)
-        
+    try:
+        if len(sys.argv) == 3:  # python wc.py -c/-l/-w/-m test.txt
+            op = sys.argv[1]
+            if "-" in op:
+                filename = sys.argv[2]
+                operations(filename, sys.argv[1])
+            else:
+                print("Incorrect syntax. "
+                      "The command line argument should follow the syntax: python "
+                      "<filename.py> -c/-l/-w/-m test.txt")
+        else:
+            if sys.argv[1] in ["-c", "-l", "-w", "-m"]:  # python wc.py -c/-l/-w/-m
+                filename = input("Filename is missing. Enter the filename: ")
+                operations(filename, sys.argv[1])
+            else:  # python wc.py test.txt
+                filename = sys.argv[1]
+                numberOfBytes(filename)
+                numberOfLines(filename)
+                numberOfWords(filename)
+                print(filename)
+    except:
+        print("An exception has occurred. "
+              "The command line argument should follow the syntax: python "
+              "<filename.py> -c/-l/-w/-m test.txt")
+
+
 if __name__ == "__main__":
-  main()
+    main()
