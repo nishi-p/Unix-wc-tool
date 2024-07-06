@@ -76,8 +76,10 @@ def main():
                 print(filename)
     except:
         print("An exception has occurred. "
-              "The command line argument should follow the syntax: python "
-              "<filename.py> -c/-l/-w/-m test.txt")
+              "The command line argument should follow the syntax: "
+              "1. python <filename.py> -c/-l/-w/-m test.txt"
+              "2. python <filename.py> test.txt"
+              "3. python <filename.py> -c/-l/-w/-m")
 
 
 if __name__ == "__main__":
